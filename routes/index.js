@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 let yelp = require('yelp-fusion')
-import axios from 'axios'
+let axios = require('axios')
 
 let key = 'u7GKaYDIKwAZnn_1RJLpM_upKK5ht1_KFhzsoRuS1PWYdzk_Vnd8E_X8Gz3KJTiE3o20GDfjFnC-Sq1XZdj_5z2yjCsNy2fgeFHPUAtOTKRBkoyYeDSg9IN4GtpBXnYx'
 
@@ -32,18 +32,20 @@ router.get('/googleNearByPlaces', (req, res, next)=>{
  */
 
   let googlePlacesKey = 'AIzaSyA7AjtKSRL1g6B6GlJhk-ikAJmNjc-EMRY';
-
-  axios.get({
+  // console.log(req.query)
+  axios({
     method: 'get',
-    url:'https://maps.googleapis.com/maps/api/place/nearbysearch/json?',
-    data:{
+    url:'https://maps.googleapis.com/maps/api/place/nearbysearch/json',
+    responseType: 'json',
+    params:{
       location:`${req.query.latitude},${req.query.longitude}`,
-      radius: req.query.radius,
-      types: req.query.types,
-      key: googlePlacesKey,
-    }
-  }).then((data)=>{
-    res.send(data)
+      radius:`${req.query.radius}`,
+      types:`${req.query.types}`,
+      key:`${googlePlacesKey}`,
+    },
+  }).then((result)=>{
+    console.log(result.data)
+    res.send(result.data)
   }).catch((error)=>{
     res.send(error)
   })
